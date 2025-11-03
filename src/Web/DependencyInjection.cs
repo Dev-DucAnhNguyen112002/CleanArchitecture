@@ -15,7 +15,7 @@ public static class DependencyInjection
     {
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-        builder.Services.AddScoped<IUser, CurrentUser>();
+        builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddHealthChecks()
@@ -47,14 +47,4 @@ public static class DependencyInjection
         });
     }
 
-    public static void AddKeyVaultIfConfigured(this IHostApplicationBuilder builder)
-    {
-        var keyVaultUri = builder.Configuration["AZURE_KEY_VAULT_ENDPOINT"];
-        if (!string.IsNullOrWhiteSpace(keyVaultUri))
-        {
-            builder.Configuration.AddAzureKeyVault(
-                new Uri(keyVaultUri),
-                new DefaultAzureCredential());
-        }
-    }
 }

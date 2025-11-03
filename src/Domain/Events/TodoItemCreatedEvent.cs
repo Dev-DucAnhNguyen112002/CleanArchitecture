@@ -1,4 +1,6 @@
-﻿namespace CleanArchitectureTest.Domain.Events;
+﻿using CleanArchitectureTest.Domain.Entities;
+
+namespace CleanArchitectureTest.Domain.Events;
 
 public class TodoItemCreatedEvent : BaseEvent
 {

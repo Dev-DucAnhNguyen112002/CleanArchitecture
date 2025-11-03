@@ -1,9 +1,10 @@
 ﻿using CleanArchitectureTest.Application.Common.Models;
-using CleanArchitectureTest.Application.TodoItems.Commands.CreateTodoItem;
-using CleanArchitectureTest.Application.TodoItems.Commands.DeleteTodoItem;
-using CleanArchitectureTest.Application.TodoItems.Commands.UpdateTodoItem;
-using CleanArchitectureTest.Application.TodoItems.Commands.UpdateTodoItemDetail;
-using CleanArchitectureTest.Application.TodoItems.Queries.GetTodoItemsWithPagination;
+using CleanArchitectureTest.Application.Features.TodoItems.Commands.CreateTodoItem;
+using CleanArchitectureTest.Application.Features.TodoItems.Commands.DeleteTodoItem;
+using CleanArchitectureTest.Application.Features.TodoItems.Commands.UpdateTodoItem;
+using CleanArchitectureTest.Application.Features.TodoItems.Commands.UpdateTodoItemDetail;
+using CleanArchitectureTest.Application.Features.TodoItems.Queries.GetTodoItemsWithPagination;
+using CleanArchitectureTest.Contract.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace CleanArchitectureTest.Web.Endpoints;
@@ -21,14 +22,14 @@ public class TodoItems : EndpointGroupBase
             .MapDelete(DeleteTodoItem, "{id}");
     }
 
-    public async Task<Ok<PaginatedList<TodoItemBriefDto>>> GetTodoItemsWithPagination(ISender sender, [AsParameters] GetTodoItemsWithPaginationQuery query)
+    public async Task<Ok<PagedResult<TodoItemBriefDto>>> GetTodoItemsWithPagination(ISender sender, [AsParameters] GetTodoItemsWithPaginationQuery query)
     {
         var result = await sender.Send(query);
 
         return TypedResults.Ok(result);
     }
 
-    public async Task<Created<int>> CreateTodoItem(ISender sender, CreateTodoItemCommand command)
+    public async Task<Created<BaseResult<Guid>>> CreateTodoItem(ISender sender, CreateTodoItemCommand command)
     {
         var id = await sender.Send(command);
 
@@ -44,7 +45,7 @@ public class TodoItems : EndpointGroupBase
         return TypedResults.NoContent();
     }
 
-    public async Task<Results<NoContent, BadRequest>> UpdateTodoItemDetail(ISender sender, int id, UpdateTodoItemDetailCommand command)
+    public async Task<Results<NoContent, BadRequest>> UpdateTodoItemDetail(ISender sender, Guid id, UpdateTodoItemDetailCommand command)
     {
         if (id != command.Id) return TypedResults.BadRequest();
         
@@ -53,7 +54,7 @@ public class TodoItems : EndpointGroupBase
         return TypedResults.NoContent();
     }
 
-    public async Task<NoContent> DeleteTodoItem(ISender sender, int id)
+    public async Task<NoContent> DeleteTodoItem(ISender sender, Guid id)
     {
         await sender.Send(new DeleteTodoItemCommand(id));
 

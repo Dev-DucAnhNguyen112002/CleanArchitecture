@@ -1,0 +1,53 @@
+﻿{
+  "$schema": "https://raw.githubusercontent.com/ErikEJ/EFCorePowerTools/master/samples/efcpt-config.schema.json",
+  "code-generation": {
+    "enable-on-configuring": false,
+    "generate-mermaid-diagram": false,
+    "merge-dacpacs": false,
+    "refresh-object-lists": true,
+    "remove-defaultsql-from-bool-properties": false,
+    "soft-delete-obsolete-files": true,
+    "t4-template-path": null,
+    "type": "all",
+    "use-alternate-stored-procedure-resultset-discovery": false,
+    "use-data-annotations": false,
+    "use-database-names": false,
+    "use-database-names-for-routines": true,
+    "use-decimal-data-annotation-for-sproc-results": true,
+    "use-inflector": true,
+    "use-internal-access-modifiers-for-sprocs-and-functions": false,
+    "use-legacy-inflector": false,
+    "use-many-to-many-entity": false,
+    "use-nullable-reference-types": true,
+    "use-prefix-navigation-naming": false,
+    "use-t4": true,
+    "use-t4-split": false
+  },
+  "file-layout": {
+    "output-dbcontext-path": "Data",
+    "output-path": "..\\Domain\\Entities"
+  },
+  "names": {
+    "dbcontext-name": "ApplicationDbContext",
+    "dbcontext-namespace": "Infrastructure.Data",
+    "model-namespace": "Domain.Entities",
+    "root-namespace": "CleanArchitectureTest"
+  },
+  "tables": [
+    {
+      "exclusionWildcard": "test.*"
+    },
+    {
+      "name": "public.users"
+    },
+    {
+      "name": "test.user"
+    },
+    {
+      "name": "public.roles"
+    },
+    {
+      "name": "public.user_roles"
+    }
+  ]
+}

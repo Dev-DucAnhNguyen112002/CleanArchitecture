@@ -4,7 +4,7 @@ using CleanArchitectureTest.Application.Common.Interfaces;
 
 namespace CleanArchitectureTest.Web.Services;
 
-public class CurrentUser : IUser
+public class CurrentUser : ICurrentUser
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
 

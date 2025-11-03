@@ -1,19 +1,22 @@
-using CleanArchitectureTest.Infrastructure.Data;
+﻿using CleanArchitectureTest.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.AddKeyVaultIfConfigured();
+//builder.AddKeyVaultIfConfigured();
 builder.AddApplicationServices();
 builder.AddInfrastructureServices();
 builder.AddWebServices();
+//builder.Services.AddHttpClientService();
+
+builder.Logging.ClearProviders();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    await app.InitialiseDatabaseAsync();
+    //await app.InitialiseDatabaseAsync();
 }
 else
 {

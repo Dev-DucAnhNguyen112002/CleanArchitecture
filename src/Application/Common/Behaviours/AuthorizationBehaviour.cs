@@ -7,11 +7,11 @@ namespace CleanArchitectureTest.Application.Common.Behaviours;
 
 public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
 {
-    private readonly IUser _user;
+    private readonly ICurrentUser _user;
     private readonly IIdentityService _identityService;
 
     public AuthorizationBehaviour(
-        IUser user,
+        ICurrentUser user,
         IIdentityService identityService)
     {
         _user = user;

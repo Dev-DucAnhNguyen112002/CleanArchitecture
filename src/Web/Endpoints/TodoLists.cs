@@ -1,7 +1,8 @@
-﻿using CleanArchitectureTest.Application.TodoLists.Commands.CreateTodoList;
-using CleanArchitectureTest.Application.TodoLists.Commands.DeleteTodoList;
-using CleanArchitectureTest.Application.TodoLists.Commands.UpdateTodoList;
-using CleanArchitectureTest.Application.TodoLists.Queries.GetTodos;
+﻿using CleanArchitectureTest.Application.Features.TodoLists.Commands.CreateTodoList;
+using CleanArchitectureTest.Application.Features.TodoLists.Commands.DeleteTodoList;
+using CleanArchitectureTest.Application.Features.TodoLists.Commands.UpdateTodoList;
+using CleanArchitectureTest.Application.Features.TodoLists.Queries.GetTodos;
+using CleanArchitectureTest.Contract.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace CleanArchitectureTest.Web.Endpoints;
@@ -12,27 +13,20 @@ public class TodoLists : EndpointGroupBase
     {
         app.MapGroup(this)
             .RequireAuthorization()
-            .MapGet(GetTodoLists)
             .MapPost(CreateTodoList)
             .MapPut(UpdateTodoList, "{id}")
             .MapDelete(DeleteTodoList, "{id}");
     }
 
-    public async Task<Ok<TodosVm>> GetTodoLists(ISender sender)
-    {
-        var vm = await sender.Send(new GetTodosQuery());
 
-        return TypedResults.Ok(vm);
-    }
-
-    public async Task<Created<int>> CreateTodoList(ISender sender, CreateTodoListCommand command)
+    public async Task<Created<BaseResult<Guid>>> CreateTodoList(ISender sender, CreateTodoListCommand command)
     {
         var id = await sender.Send(command);
 
         return TypedResults.Created($"/{nameof(TodoLists)}/{id}", id);
     }
 
-    public async Task<Results<NoContent, BadRequest>> UpdateTodoList(ISender sender, int id, UpdateTodoListCommand command)
+    public async Task<Results<NoContent, BadRequest>> UpdateTodoList(ISender sender, Guid id, UpdateTodoListCommand command)
     {
         if (id != command.Id) return TypedResults.BadRequest();
         
@@ -41,7 +35,7 @@ public class TodoLists : EndpointGroupBase
         return TypedResults.NoContent();
     }
 
-    public async Task<NoContent> DeleteTodoList(ISender sender, int id)
+    public async Task<NoContent> DeleteTodoList(ISender sender, Guid id)
     {
         await sender.Send(new DeleteTodoListCommand(id));
 

@@ -1,4 +1,4 @@
-{
+﻿{
   "runtime": "Net90",
   "defaultVariables": null,
   "documentGenerator": {
@@ -44,7 +44,7 @@
       "schemaNameGeneratorType": null,
       "contractResolverType": null,
       "serializerSettingsType": null,
-      "useDocumentProvider": true,
+      "useDocumentProvider": false, 
       "documentName": "v1",
       "aspNetCoreEnvironment": null,
       "createWebHostBuilderMethod": null,

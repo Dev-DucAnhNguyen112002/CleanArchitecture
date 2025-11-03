@@ -1,10 +1,12 @@
-﻿namespace CleanArchitectureTest.Domain.Entities;
+﻿using System;
+using System.Collections.Generic;
+using CleanArchitectureTest.Domain.Common;
 
-public class TodoList : BaseAuditableEntity
+namespace CleanArchitectureTest.Domain.Entities;
+
+public partial class TodoList : BaseAuditableEntity
 {
     public string? Title { get; set; }
 
-    public Colour Colour { get; set; } = Colour.White;
-
-    public IList<TodoItem> Items { get; private set; } = new List<TodoItem>();
+    public string? ColourCode { get; set; }
 }
