@@ -1,17 +1,23 @@
 ﻿using System.Reflection;
+using System.Text;
 using CleanArchitectureTest.Application.Common.Interfaces;
 using CleanArchitectureTest.Application.Interfaces;
 using CleanArchitectureTest.Application.Interfaces.Repositories;
+using CleanArchitectureTest.Domain.Configs;
 using CleanArchitectureTest.Domain.Constants;
 using CleanArchitectureTest.Infrastructure.Data;
 using CleanArchitectureTest.Infrastructure.Data.Interceptors;
 using CleanArchitectureTest.Infrastructure.Identity;
 using CleanArchitectureTest.Infrastructure.Repositories;
+using ISAT.Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -39,21 +45,32 @@ public static class DependencyInjection
         builder.Services.AddSingleton(TimeProvider.System);
 
         // Auth service + JWT options
-        //builder.Services.AddAuthentication()
-        //    .AddBearerToken(IdentityConstants.BearerScheme);
+        builder.Services.AddScoped<IAuthService, AuthService>();
+        builder.Services.AddAuthenService(builder.Configuration);
+        builder.Services.AddMemoryCache();
 
-        //builder.Services.AddAuthorizationBuilder();
-
-        //builder.Services
-        //    .AddIdentityCore<ApplicationUser>()
-        //    .AddRoles<IdentityRole>()
-        //    .AddEntityFrameworkStores<ApplicationDbContext>()
-        //    .AddApiEndpoints();
-        //builder.Services.AddTransient<IIdentityService, IdentityService>();
-        //builder.Services.AddAuthorization(options =>
-        //    options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));
     }
-
+    public static IServiceCollection AddAuthenService(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<JwtConfig>(configuration.GetSection("Jwt"));
+        var config = services.BuildServiceProvider().GetRequiredService<IOptions<JwtConfig>>().Value;
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+       .AddJwtBearer(options =>
+       {
+           options.TokenValidationParameters = new TokenValidationParameters
+           {
+               ValidateIssuer = true,
+               ValidateAudience = true,
+               ValidateLifetime = true,
+               ValidateIssuerSigningKey = true,
+               ValidIssuer = config.Issuer,
+               ValidAudience = config.Audience,
+               IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.SecretKey))
+           };
+       });
+        services.AddAuthorization();
+        return services;
+    }
     private static void RegisterRepositories(this IServiceCollection services, IConfiguration configuration)
     {
         var interfaceType = typeof(IGenericRepository<>);
