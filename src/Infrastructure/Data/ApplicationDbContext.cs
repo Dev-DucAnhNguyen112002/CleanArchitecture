@@ -75,6 +75,7 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Emailconfirmed)
                 .HasDefaultValue(false)
                 .HasColumnName("emailconfirmed");
+            entity.Property(e => e.IsActive).HasColumnName("is_active");
             entity.Property(e => e.LastModified).HasColumnName("last_modified").HasColumnType("timestamp with time zone");
             entity.Property(e => e.LastModifiedBy)
                 .HasMaxLength(256)

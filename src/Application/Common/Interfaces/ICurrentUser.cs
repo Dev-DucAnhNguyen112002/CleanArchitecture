@@ -5,28 +5,24 @@ namespace CleanArchitectureTest.Application.Common.Interfaces;
 public interface ICurrentUser
 {
     string? Id { get; }
-    //public string? Username { get; set; }
 
-    //public string? Normalizedusername { get; set; }
+    // Username (từ claim 'name' hoặc 'preferred_username')
+    string? Username { get; }
 
-    //public string? Email { get; set; }
+    // Email (từ claim 'email')
+    string? Email { get; }
 
-    //public string? Normalizedemail { get; set; }
+    // Tên đầy đủ (từ claim 'given_name', 'full_name'...)
+    string? FullName { get; }
+    string? Phonenumber { get; }
 
-    //public bool? Emailconfirmed { get; set; }
+    // Trạng thái đã xác thực
+    bool IsAuthenticated { get; }
 
-    //public string Passwordhash { get; set; }
+    // Danh sách các vai trò (roles) (từ claim 'role')
+    IEnumerable<string> Roles { get; }
 
-    //public string? Phonenumber { get; set; }
-
-    //public bool? Phonenumberconfirmed { get; set; }
-
-    //public bool? Twofactorenabled { get; set; }
-
-    //public DateTimeOffset? Lockoutend { get; set; }
-
-    //public bool? Lockoutenabled { get; set; }
-
-    //public int? Accessfailedcount { get; set; }
+    // Một hàm helper để lấy claim bất kỳ nếu cần
+    string? GetClaimValue(string claimType);
 
 }

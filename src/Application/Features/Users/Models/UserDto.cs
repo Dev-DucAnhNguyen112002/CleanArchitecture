@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using CleanArchitectureTest.Domain.Common;
+using CleanArchitectureTest.Domain.Entities;
 
-namespace CleanArchitectureTest.Domain.Entities;
+namespace CleanArchitectureTest.Application.Features.Users.Models;
 
-public partial class User : BaseAuditableEntity
+public record UserDto
 {
+    public Guid Id { get; init; }
     public string Username { get; set; } = null!;
 
     public string Normalizedusername { get; set; } = null!;
@@ -33,5 +33,16 @@ public partial class User : BaseAuditableEntity
     public bool? IsActive { get; set; }
     public string? FullName { get; set; }
 
-    public virtual ICollection<Role> Roles { get; set; } = new List<Role>();
+    public DateTimeOffset Created { get; init; }
+    public string? CreatedBy { get; init; }
+    public DateTimeOffset? LastModified { get; init; }
+    public string? LastModifiedBy { get; init; }
+}
+
+public class UserProfile : Profile
+{
+    public UserProfile()
+    {
+        CreateMap<User, UserDto>();
+    }
 }

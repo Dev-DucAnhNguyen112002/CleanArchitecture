@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using CleanArchitectureTest.Domain.Common;
+using CleanArchitectureTest.Domain.Entities;
 
-namespace CleanArchitectureTest.Domain.Entities;
+namespace CleanArchitectureTest.Application.Features.Users.Models;
 
-public partial class User : BaseAuditableEntity
+public record CurrentUserDto
 {
+    public Guid Id { get; init; }
     public string Username { get; set; } = null!;
 
     public string Normalizedusername { get; set; } = null!;
@@ -32,6 +33,13 @@ public partial class User : BaseAuditableEntity
 
     public bool? IsActive { get; set; }
     public string? FullName { get; set; }
+    public bool IsAuthenticated { get; init; }
+}
 
-    public virtual ICollection<Role> Roles { get; set; } = new List<Role>();
+public sealed class CurrentUserProfile : Profile
+{
+    public CurrentUserProfile()
+    {
+        CreateMap<User, CurrentUserDto>();
+    }
 }
