@@ -144,6 +144,7 @@ public sealed class AuthService : IAuthService
         }
 
         // LOẠI BỎ - Các thuộc tính này không tồn tại trên class User của bạn
+        // AddClaimIfPresent(claims, UserClaimTypes.FullName, user.FullName);
         // AddClaimIfPresent(claims, UserClaimTypes.AvatarUrl, user.AvatarUrl);
         // AddClaimIfPresent(claims, UserClaimTypes.StorageQuota, user.StorageQuota);
         // AddClaimIfPresent(claims, UserClaimTypes.StorageUsed, user.StorageUsed);
